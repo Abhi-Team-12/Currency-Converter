@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 20px;
+            background-color: #949393;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        input,
+        select,
+        button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+        
+        button:hover {
+            background-color: lime;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Currency Converter</h1>
+    <label for="ammount">Ammount:</label>
+    <input type="number" placeholder="Enter Ammount" id="ammount">
+    <label for="fromcurrency">From:</label>
+    <select name="" id="fromcurrency">
+        <option value="USD">USD - US Doller</option>
+        <option value="INR">INR - Indian Rupee</option>
+        <option value="EUR">EUR - Euro</option>
+        <option value="GBP">GBP - British Pound</option>
+        <!-- Add More Currency -->
+    </select>
+    <label for="tocurrency">To:</label>
+    <select name="" id="tocurrency">
+        <option value="USD">USD - US Doller</option>
+        <option value="INR">INR - Indian Rupee</option>
+        <option value="EUR">EUR - Euro</option>
+        <option value="GBP">GBP - British Pound</option>
+        <!-- Add More Currency -->
+    </select>
+    <br><br>
+    <button onclick="convertCurrency()">Convert</button>
+
+    <h1>Converted Ammount:</h1>
+
+    <h1 id="convertedAmmount"></h1>
+
+    <script>
+        async function convertCurrency() {
+            const ammount = document.getElementById('ammount').value;
+            const fromcurrency = document.getElementById('fromcurrency').value;
+            const tocurrency = document.getElementById('tocurrency').value;
+            if (ammount === '') {
+                document.getElementById("convertedAmmount").innerText = "Plaese Enter A Ammount"
+            }
+            const url = `https://api.exchangerate-api.com/v4/latest/${fromcurrency}`;
+            try {
+                const response = await fetch(url)
+                const data = await response.json()
+                console.log(data)
+                const rate = data.rates[tocurrency]
+                const convertedAmmount = (ammount * rate).toFixed(2)
+                console.log(convertedAmmount)
+                document.getElementById('convertedAmmount').innerText = `${convertedAmmount}`
+            } catch (error) {
+                document.getElementById('convertedAmmount').innerText = "Error Tatching Data"
+
+            }
+        }
+    </script>
+</body>
+
+</html>
